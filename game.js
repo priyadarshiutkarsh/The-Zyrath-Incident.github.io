@@ -108,20 +108,20 @@ const WALL_HEIGHT = 3;
 const JUMPER_COUNT = 15;
 
 /** @const {number} Base movement speed for enemies (units per frame) */
-const JUMPER_SPEED = 0.08;
+const JUMPER_SPEED = 0.06;
 
 /** @const {number} Chase speed (matched to base speed for consistency) */
-const JUMPER_CHASE_SPEED = 0.08;
+const JUMPER_CHASE_SPEED = 0.06;
 
 /** @const {number} Maximum jump height for arcade-style enemy movement */
-const JUMP_HEIGHT = 1.4;
+const JUMP_HEIGHT = 1.2;
 
 /** @const {number} Jump animation frequency (normalized 0-1 scale) */
-const JUMP_FREQUENCY = 0.20;
+const JUMP_FREQUENCY = 0.40;
 
 // Camera Settings
 /** @const {number} Height of top-down camera above ground plane */
-const CAMERA_HEIGHT = 12;
+const CAMERA_HEIGHT = 13;
 
 // Combat Configuration
 /** @const {number} Projectile velocity for pistol (units per frame) */
