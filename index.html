@@ -120,6 +120,27 @@ UI ARCHITECTURE:
             text-shadow: 0 0 15px rgba(255, 0, 0, 0.9), 0 2px 8px rgba(0,0,0,0.8);
         }
         
+        @keyframes coinPulse {
+            0% { transform: scale(1); color: #ffcccc; }
+            50% { transform: scale(1.3); color: #FFD700; text-shadow: 0 0 25px rgba(255, 215, 0, 1); }
+            100% { transform: scale(1); color: #ffcccc; }
+        }
+        
+        @keyframes floatCoin {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) translateY(0) scale(0.5);
+            }
+            10% {
+                opacity: 1;
+                transform: translate(-50%, -50%) translateY(-10px) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) translateY(-100px) scale(0.8);
+            }
+        }
+        
         #weaponName {
             font-size: 22px;
         }
@@ -247,9 +268,9 @@ UI ARCHITECTURE:
                 0 0 100px rgba(255, 0, 0, 0.3),
                 inset 0 0 20px rgba(0,0,0,0.9);
             backdrop-filter: blur(5px);
-            overflow: hidden;
+            overflow: visible;
             width: 450px;
-            height: 300px;
+            min-height: 350px;
             border-image: linear-gradient(45deg, #ff0000, #aa0000, #ff0000) 1;
         }
         
@@ -284,8 +305,8 @@ UI ARCHITECTURE:
         
         /* Content container */
         .game-over-content {
-            padding: 50px 30px 40px 30px;
-            height: 100%;
+            padding: 60px 30px 50px 30px;
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -429,6 +450,49 @@ UI ARCHITECTURE:
             background: linear-gradient(135deg, #aa0000, #770000);
         }
         
+        #changeGameModeBtn {
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #444444, #222222);
+            color: #ffffff;
+            border: 2px solid #666666;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Metal Mania', cursive;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 15px rgba(100, 100, 100, 0.3),
+                0 3px 8px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+            letter-spacing: 2px;
+            animation: buttonAppear 1.5s ease-out 1s both;
+            text-transform: uppercase;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+            min-width: 100px;
+            outline: none;
+        }
+        
+        #changeGameModeBtn:hover {
+            background: linear-gradient(135deg, #666666, #333333);
+            box-shadow: 
+                0 0 25px rgba(150, 150, 150, 0.6),
+                0 4px 12px rgba(0,0,0,0.6);
+            transform: translateY(-2px);
+            border-color: #888888;
+        }
+        
+        #changeGameModeBtn:active {
+            transform: translateY(0px);
+            box-shadow: 
+                0 0 15px rgba(100, 100, 100, 0.5),
+                0 1px 4px rgba(0,0,0,0.7);
+            background: linear-gradient(135deg, #333333, #111111);
+        }
+        
         @keyframes buttonAppear {
             0% {
                 opacity: 0;
@@ -508,6 +572,130 @@ UI ARCHITECTURE:
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
         }
         
+        /* ====================================================================
+           GAME MODE SELECTION SCREEN
+           ==================================================================== */
+        #gameModeScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0000, #1a0000, #0a0a0a);
+            z-index: 2999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ff3333;
+        }
+        
+        #gameModeScreen.visible {
+            display: flex !important;
+        }
+        
+        #gameModeScreen h1 {
+            font-family: 'Nosifer', cursive;
+            font-size: 72px;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.9), 0 0 80px rgba(255, 0, 0, 0.5);
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+            letter-spacing: 4px;
+        }
+        
+        #gameModeScreen h2 {
+            font-family: 'Metal Mania', cursive;
+            font-size: 28px;
+            color: #ffcccc;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            animation: fadeInButtons 1.5s ease-out;
+        }
+        
+        @keyframes fadeInButtons {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .mode-button {
+            background: linear-gradient(135deg, #330000, #660000);
+            border: 3px solid #ff3333;
+            color: #ffcccc;
+            font-family: 'Nosifer', cursive;
+            font-size: 24px;
+            padding: 30px 60px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+            min-width: 280px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInButton 1s ease-out forwards;
+        }
+        
+        .mode-button:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+        
+        .mode-button:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        
+        @keyframes fadeInButton {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .mode-button:hover {
+            background: linear-gradient(135deg, #660000, #990000);
+            border-color: #ff6666;
+            box-shadow: 0 0 40px rgba(255, 51, 51, 0.6), inset 0 0 20px rgba(0,0,0,0.3);
+            transform: translateY(-5px) scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.8);
+        }
+        
+        .mode-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .mode-button .mode-title {
+            font-size: 36px;
+            font-weight: bold;
+            display: block;
+            color: #ff6666;
+            font-family: 'Nosifer', cursive;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        }
+        
+        .mode-button .mode-desc {
+            font-size: 16px;
+            color: #ffaaaa;
+            line-height: 1.6;
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             #mobileControls {
                 display: flex;
@@ -524,6 +712,867 @@ UI ARCHITECTURE:
                 padding: 10px;
                 min-width: 150px;
             }
+            
+            #gameModeScreen h1 {
+                font-size: 48px;
+            }
+            
+            #gameModeScreen h2 {
+                font-size: 20px;
+            }
+            
+            .mode-buttons {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .mode-button {
+                padding: 20px 40px;
+                min-width: 240px;
+            }
+            
+            .mode-button .mode-title {
+                font-size: 24px;
+            }
+            
+            .mode-button .mode-desc {
+                font-size: 14px;
+            }
+        }
+        
+        /* ====================================================================
+           SHOP MODAL STYLES
+           ==================================================================== */
+        
+        /* ====================================================================
+           SHOP MODAL - Enhanced Gaming Store Design
+           ==================================================================== */
+        
+        #shopModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+        }
+        
+        #shopModal.show {
+            display: flex;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .shop-container {
+            background: linear-gradient(135deg, 
+                rgba(10,10,25,0.98) 0%, 
+                rgba(15,15,35,0.98) 50%, 
+                rgba(10,10,25,0.98) 100%);
+            border: 5px solid;
+            border-image: linear-gradient(135deg, #00d4ff, #00ffaa, #ff00ff, #00d4ff) 1;
+            border-radius: 24px;
+            padding: 0;
+            width: 92vw;
+            max-width: 1400px;
+            height: 88vh;
+            max-height: 900px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 100px rgba(0, 212, 255, 0.8),
+                0 0 180px rgba(0, 255, 170, 0.4),
+                0 0 220px rgba(255, 0, 255, 0.3),
+                inset 0 0 80px rgba(0,0,0,0.95);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            animation: shopBorderPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes shopBorderPulse {
+            0%, 100% { 
+                border-image: linear-gradient(135deg, #00d4ff, #00ffaa, #ff00ff, #00d4ff) 1;
+                box-shadow: 
+                    0 0 100px rgba(0, 212, 255, 0.8),
+                    0 0 180px rgba(0, 255, 170, 0.4),
+                    0 0 220px rgba(255, 0, 255, 0.3),
+                    inset 0 0 80px rgba(0,0,0,0.95);
+            }
+            50% { 
+                border-image: linear-gradient(135deg, #ff00ff, #00d4ff, #00ffaa, #ff00ff) 1;
+                box-shadow: 
+                    0 0 120px rgba(255, 0, 255, 0.8),
+                    0 0 200px rgba(0, 212, 255, 0.5),
+                    0 0 240px rgba(0, 255, 170, 0.4),
+                    inset 0 0 80px rgba(0,0,0,0.95);
+            }
+        }
+        
+        .shop-header {
+            background: linear-gradient(135deg, 
+                rgba(0, 212, 255, 0.15) 0%, 
+                rgba(0, 255, 170, 0.08) 100%);
+            padding: 25px 40px;
+            border-bottom: 4px solid rgba(0, 212, 255, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .shop-title {
+            font-family: 'Metal Mania', cursive;
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00d4ff, #00ffaa, #ff00ff, #00d4ff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+            filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.8)) drop-shadow(0 0 35px rgba(255, 0, 255, 0.4));
+            letter-spacing: 3px;
+            animation: titleGradient 3s ease infinite;
+        }
+        
+        @keyframes titleGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .shop-coins {
+            font-family: 'Metal Mania', cursive;
+            font-size: 32px;
+            color: #FFD700;
+            text-shadow: 
+                0 0 25px rgba(255, 215, 0, 1),
+                0 0 45px rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 140, 0, 0.15));
+            padding: 14px 32px;
+            border-radius: 35px;
+            border: 3px solid #FFD700;
+            box-shadow: 
+                0 0 25px rgba(255, 215, 0, 0.6),
+                0 0 45px rgba(255, 215, 0, 0.3),
+                inset 0 0 20px rgba(255, 215, 0, 0.15);
+            animation: coinPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes coinPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 25px rgba(255, 215, 0, 0.6),
+                    0 0 45px rgba(255, 215, 0, 0.3),
+                    inset 0 0 20px rgba(255, 215, 0, 0.15);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 35px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.5),
+                    inset 0 0 25px rgba(255, 215, 0, 0.2);
+            }
+        }
+        
+        .shop-close {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(255, 50, 50, 0.3), rgba(200, 0, 0, 0.2));
+            border: 3px solid #ff3232;
+            color: #ff5050;
+            font-size: 36px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: Arial, sans-serif;
+            line-height: 1;
+            padding: 0;
+            z-index: 10000;
+            box-shadow: 0 0 15px rgba(255, 50, 50, 0.4);
+        }
+        
+        .shop-close:hover {
+            background: linear-gradient(135deg, #ff3232, #cc0000);
+            color: #fff;
+            transform: rotate(90deg) scale(1.15);
+            box-shadow: 0 0 30px rgba(255, 50, 50, 0.8);
+        }
+        
+        /* Category Tabs */
+        .shop-tabs {
+            display: flex;
+            gap: 5px;
+            padding: 0 40px;
+            background: linear-gradient(135deg, rgba(15, 15, 30, 0.98), rgba(10, 10, 25, 0.98));
+            border-bottom: 3px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .shop-tab {
+            padding: 18px 35px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-family: 'Metal Mania', cursive;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 4px solid transparent;
+            position: relative;
+            letter-spacing: 1px;
+        }
+        
+        .shop-tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #00ffaa);
+            transition: width 0.3s ease;
+        }
+        
+        .shop-tab:hover {
+            color: #00d4ff;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), transparent);
+            transform: translateY(-2px);
+        }
+        
+        .shop-tab:hover::before {
+            width: 100%;
+        }
+        
+        .shop-tab.active {
+            color: #00ffaa;
+            border-bottom-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 255, 170, 0.8);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 255, 170, 0.08));
+        }
+        
+        .shop-tab.active::before {
+            width: 100%;
+            background: linear-gradient(90deg, #00ffaa, #00d4ff);
+        }
+        
+        .tab-count {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-left: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+        
+        .shop-tab.active .tab-count {
+            background: rgba(0, 255, 170, 0.3);
+            border-color: rgba(0, 255, 170, 0.6);
+        }
+        
+        /* Filter/Sort Bar */
+        .shop-filters {
+            background: linear-gradient(135deg, rgba(10,10,25,0.95), rgba(15,15,35,0.95));
+            padding: 15px 30px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+        
+        .shop-search {
+            flex: 1;
+            max-width: 300px;
+            padding: 10px 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            color: #00d4ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .shop-search:focus {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 255, 170, 0.6);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .shop-search::placeholder {
+            color: rgba(0, 212, 255, 0.4);
+        }
+        
+        .shop-sort, .shop-filter {
+            padding: 10px 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            color: #00d4ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .shop-sort:hover, .shop-filter:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 255, 170, 0.6);
+        }
+        
+        .shop-sort option, .shop-filter option {
+            background: #0a0a19;
+            color: #00d4ff;
+        }
+        
+        .filter-stats {
+            color: rgba(0, 212, 255, 0.8);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        /* Main Content Area */
+        .shop-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* Left Side - Live Preview */
+        .shop-preview-section {
+            width: 38%;
+            background: linear-gradient(135deg, 
+                rgba(20,20,45,0.98) 0%, 
+                rgba(15,15,35,0.98) 100%);
+            border-right: 4px solid rgba(0, 212, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 30px;
+            position: relative;
+            box-shadow: inset 0 0 40px rgba(0, 212, 255, 0.05);
+        }
+        
+        .preview-character {
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle at center, 
+                rgba(0, 255, 170, 0.25) 0%, 
+                rgba(0, 212, 255, 0.15) 40%, 
+                rgba(255, 0, 255, 0.1) 70%,
+                transparent 85%);
+            border: 4px solid rgba(0, 212, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 0 50px rgba(0, 212, 255, 0.4),
+                0 0 80px rgba(0, 255, 170, 0.2),
+                inset 0 0 40px rgba(0, 255, 170, 0.15);
+            animation: previewGlow 3s ease-in-out infinite;
+        }
+        
+        .preview-character::before {
+            content: '';
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            animation: previewRing 4s linear infinite;
+        }
+        
+        .preview-character::after {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 0, 255, 0.2);
+            animation: previewRing 6s linear infinite reverse;
+        }
+        
+        @keyframes previewRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes previewGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 50px rgba(0, 212, 255, 0.4),
+                    0 0 80px rgba(0, 255, 170, 0.2),
+                    inset 0 0 40px rgba(0, 255, 170, 0.15);
+                border-color: rgba(0, 212, 255, 0.5);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 70px rgba(0, 255, 170, 0.6),
+                    0 0 110px rgba(0, 212, 255, 0.4),
+                    inset 0 0 50px rgba(0, 212, 255, 0.2);
+                border-color: rgba(0, 255, 170, 0.6);
+            }
+        }
+        
+        .preview-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .preview-label {
+            font-family: 'Metal Mania', cursive;
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00d4ff, #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        
+        .preview-stats {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 255, 170, 0.08));
+            border: 3px solid rgba(0, 212, 255, 0.4);
+            border-radius: 15px;
+            padding: 20px 30px;
+            text-align: left;
+            width: 100%;
+            box-shadow: 
+                0 0 20px rgba(0, 212, 255, 0.2),
+                inset 0 0 20px rgba(0, 255, 170, 0.05);
+        }
+        
+        .preview-stat-line {
+            font-family: 'Courier New', monospace;
+            color: #ccc;
+            font-size: 15px;
+            margin: 8px 0;
+            letter-spacing: 0.5px;
+        }
+        
+        .preview-stat-line strong {
+            color: #00ffaa;
+            text-shadow: 0 0 8px rgba(0, 255, 170, 0.5);
+            margin-right: 8px;
+        }
+        
+        .preview-stat-line span {
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        /* Right Side - Cosmetic Grid */
+        .shop-items-section {
+            width: 62%;
+            padding: 35px;
+            overflow-y: auto;
+            background: linear-gradient(135deg, rgba(12, 12, 28, 0.98), rgba(8, 8, 20, 0.98));
+        }
+        
+        .shop-items-section::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        .shop-items-section::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .shop-items-section::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4ff, #00ffaa);
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+        }
+        
+        .shop-items-section::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00ffaa, #00d4ff);
+        }
+        
+        .cosmetic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+            padding: 5px;
+        }
+        
+        .cosmetic-item {
+            background: linear-gradient(135deg, 
+                rgba(30,30,55,0.98) 0%, 
+                rgba(20,20,40,0.95) 100%);
+            border: 3px solid rgba(100, 100, 150, 0.5);
+            border-radius: 18px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cosmetic-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(0, 212, 255, 0.15), 
+                rgba(255, 0, 255, 0.1),
+                transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .cosmetic-item:hover::before {
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -50%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 150%; opacity: 0; }
+        }
+        
+        .cosmetic-item:hover {
+            border-color: #00d4ff;
+            transform: translateY(-10px) scale(1.08);
+            box-shadow: 
+                0 20px 50px rgba(0, 212, 255, 0.6),
+                0 0 40px rgba(0, 255, 170, 0.4),
+                0 0 60px rgba(255, 0, 255, 0.2);
+            background: linear-gradient(135deg, 
+                rgba(40,40,65,0.98) 0%, 
+                rgba(30,30,50,0.98) 100%);
+        }
+        
+        .cosmetic-item.equipped {
+            border-color: #00ff88;
+            background: linear-gradient(135deg, 
+                rgba(0,60,40,0.98) 0%, 
+                rgba(0,40,28,0.95) 100%);
+            box-shadow: 
+                0 0 35px rgba(0, 255, 136, 0.6),
+                0 0 60px rgba(0, 255, 136, 0.3),
+                inset 0 0 25px rgba(0, 255, 136, 0.12);
+            animation: equippedGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes equippedGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 35px rgba(0, 255, 136, 0.6),
+                    0 0 60px rgba(0, 255, 136, 0.3),
+                    inset 0 0 25px rgba(0, 255, 136, 0.12);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 45px rgba(0, 255, 136, 0.8),
+                    0 0 80px rgba(0, 255, 136, 0.5),
+                    inset 0 0 30px rgba(0, 255, 136, 0.2);
+            }
+        }
+        
+        .cosmetic-item.equipped::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            border-radius: 50%;
+            color: #000;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 136, 0.8),
+                0 0 35px rgba(0, 255, 136, 0.4);
+            animation: checkmarkSpin 0.5s ease-out, checkmarkPulse 2s ease-in-out 0.5s infinite;
+        }
+        
+        @keyframes checkmarkSpin {
+            from { transform: scale(0) rotate(-180deg); }
+            to { transform: scale(1) rotate(0deg); }
+        }
+        
+        @keyframes checkmarkPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .cosmetic-item.owned {
+            border-color: #4169E1;
+            box-shadow: 0 0 15px rgba(65, 105, 225, 0.3);
+        }
+        
+        .cosmetic-item.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(50%);
+        }
+        
+        .cosmetic-item.locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .cosmetic-icon {
+            width: 95px;
+            height: 95px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.5), 
+                rgba(20, 20, 40, 0.3));
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 
+                inset 0 0 20px rgba(0, 212, 255, 0.15),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cosmetic-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.2) 0%, transparent 70%);
+            animation: iconGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes iconGlow {
+            0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+            50% { transform: translate(10%, 10%); opacity: 0.6; }
+        }
+        
+        .cosmetic-item:hover .cosmetic-icon {
+            transform: scale(1.15) rotate(8deg);
+            border-color: rgba(0, 212, 255, 0.7);
+            box-shadow: 
+                inset 0 0 30px rgba(0, 212, 255, 0.3),
+                0 0 25px rgba(0, 255, 170, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cosmetic-name {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            line-height: 1.3;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cosmetic-item:hover .cosmetic-name {
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.6);
+        }
+        
+        .cosmetic-item.equipped .cosmetic-name {
+            color: #00ff88;
+        }
+        
+        .cosmetic-price {
+            font-family: 'Metal Mania', cursive;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD700;
+            background: linear-gradient(135deg, 
+                rgba(255, 215, 0, 0.25), 
+                rgba(255, 140, 0, 0.15));
+            padding: 8px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+            box-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.3),
+                inset 0 0 10px rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .cosmetic-item:hover .cosmetic-price {
+            border-color: rgba(255, 215, 0, 0.9);
+            box-shadow: 
+                0 0 25px rgba(255, 215, 0, 0.5),
+                0 0 40px rgba(255, 215, 0, 0.3),
+                inset 0 0 15px rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .cosmetic-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 18px;
+            display: none;
+        }
+        
+        .cosmetic-item.locked .cosmetic-icon {
+            filter: grayscale(100%) brightness(0.5);
+        }
+        
+        /* RARITY TIERS - Premium Visual Enhancement */
+        .cosmetic-item[data-rarity="common"] {
+            border-color: rgba(150, 150, 150, 0.5);
+        }
+        
+        .cosmetic-item[data-rarity="rare"] {
+            border-color: rgba(50, 150, 255, 0.6);
+            box-shadow: 0 0 15px rgba(50, 150, 255, 0.3);
+        }
+        
+        .cosmetic-item[data-rarity="rare"]:hover {
+            box-shadow: 
+                0 20px 50px rgba(50, 150, 255, 0.6),
+                0 0 40px rgba(50, 150, 255, 0.5);
+        }
+        
+        .cosmetic-item[data-rarity="epic"] {
+            border-color: rgba(200, 50, 255, 0.7);
+            box-shadow: 0 0 20px rgba(200, 50, 255, 0.4);
+            animation: epicPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes epicPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(200, 50, 255, 0.4);
+                border-color: rgba(200, 50, 255, 0.7);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(200, 50, 255, 0.6);
+                border-color: rgba(200, 50, 255, 0.9);
+            }
+        }
+        
+        .cosmetic-item[data-rarity="epic"]:hover {
+            box-shadow: 
+                0 20px 50px rgba(200, 50, 255, 0.7),
+                0 0 50px rgba(200, 50, 255, 0.6);
+        }
+        
+        .cosmetic-item[data-rarity="legendary"] {
+            border-color: rgba(255, 215, 0, 0.8);
+            background: linear-gradient(135deg, 
+                rgba(50, 40, 10, 0.98) 0%, 
+                rgba(40, 30, 5, 0.95) 100%);
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.5),
+                0 0 50px rgba(255, 140, 0, 0.3);
+            animation: legendaryShine 4s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .cosmetic-item[data-rarity="legendary"]::before {
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255, 215, 0, 0.3), 
+                rgba(255, 140, 0, 0.2),
+                transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes legendaryShine {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 30px rgba(255, 215, 0, 0.5),
+                    0 0 50px rgba(255, 140, 0, 0.3);
+                border-color: rgba(255, 215, 0, 0.8);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 45px rgba(255, 215, 0, 0.8),
+                    0 0 70px rgba(255, 140, 0, 0.5);
+                border-color: rgba(255, 215, 0, 1);
+            }
+        }
+        
+        .cosmetic-item[data-rarity="legendary"]:hover {
+            box-shadow: 
+                0 20px 60px rgba(255, 215, 0, 0.8),
+                0 0 60px rgba(255, 215, 0, 0.6),
+                0 0 90px rgba(255, 140, 0, 0.4);
+            transform: translateY(-12px) scale(1.1);
+        }
+        
+        .buy-btn.disabled {
+            background: #444;
+            border-color: #666;
+            color: #888;
+            cursor: not-allowed;
+        }
+        
+        .equip-btn {
+            background: linear-gradient(135deg, #4169E1, #2849a1);
+            color: #ffffff;
+        }
+        
+        .equip-btn:hover {
+            background: linear-gradient(135deg, #5179f1, #3859b1);
+            transform: scale(1.05);
+        }
+        
+        .equipped-btn {
+            background: linear-gradient(135deg, #00aa00, #008800);
+            color: #ffffff;
+            cursor: default;
+        }
+        
+        .shop-instructions {
+            font-family: 'Metal Mania', cursive;
+            font-size: 14px;
+            color: #ff9999;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #800000;
         }
     </style>
 </head>
@@ -536,6 +1585,23 @@ UI ARCHITECTURE:
         <h1>THE ZYRATH INCIDENT</h1>
         <p>Loading the nightmare...</p>
         <p id="gameTip" style="position: absolute; bottom: 40px; font-size: 16px; color: #ff9999; font-style: italic;">"Use WASD to move through the maze"</p>
+    </div>
+    
+    <!-- ====================================================================
+         GAME MODE SELECTION SCREEN
+         Displayed after intro to choose game mode
+         ==================================================================== -->
+    <div id="gameModeScreen">
+        <h1>THE ZYRATH INCIDENT</h1>
+        <h2>SELECT YOUR NIGHTMARE</h2>
+        <div class="mode-buttons">
+            <button class="mode-button" onclick="selectGameMode('hunt')">
+                <span class="mode-title">HUNT MODE</span>
+            </button>
+            <button class="mode-button" onclick="selectGameMode('survival')">
+                <span class="mode-title">SURVIVAL MODE</span>
+            </button>
+        </div>
     </div>
     
     <!-- Group Identifier Header -->
@@ -587,6 +1653,12 @@ UI ARCHITECTURE:
             <div class="hud-label">👾 ENEMIES LEFT</div>
             <div class="hud-value" id="zombieCount">25</div>
         </div>
+        
+        <!-- Shop Button Hint -->
+        <div class="hud-section" style="cursor: pointer; transition: all 0.3s;" onclick="toggleShop()" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <div class="hud-label">🛒 SHOP</div>
+            <div class="hud-value" style="font-size: 18px;">PRESS B</div>
+        </div>
     </div>
     
     <!-- ====================================================================
@@ -597,6 +1669,7 @@ UI ARCHITECTURE:
         <p><strong>WASD:</strong> Move</p>
         <p><strong>SPACE/Click:</strong> Attack</p>
         <p><strong>F:</strong> Toggle Flashlight</p>
+        <p><strong>B:</strong> Open Shop</p>
         <p><strong>🔪 Knife:</strong> Melee weapon</p>
         <p><strong>Goal:</strong> Reach exit or kill all zombies!</p>
         <button id="modeToggle">Switch to FULL MODE</button>
@@ -628,6 +1701,83 @@ UI ARCHITECTURE:
     </div>
     
     <!-- ====================================================================
+         SHOP MODAL - Among Us Style Cosmetic Customization
+         Live preview with categorized cosmetics
+         ==================================================================== -->
+    <div id="shopModal">
+        <div class="shop-container">
+            <button class="shop-close" onclick="toggleShop()">×</button>
+            
+            <!-- Header with title and coins -->
+            <div class="shop-header">
+                <h2 class="shop-title">🎨 COSMETIC SHOP</h2>
+                <div class="shop-coins">🪙 <span id="shopCoinDisplay">0</span></div>
+            </div>
+            
+            <!-- Category Tabs with Item Counts -->
+            <div class="shop-tabs">
+                <button class="shop-tab active" data-category="hats" onclick="switchShopCategory('hats')">
+                    🎩 HATS <span class="tab-count" id="hatsCount">21</span>
+                </button>
+                <button class="shop-tab" data-category="weapons" onclick="switchShopCategory('weapons')">
+                    🔪 WEAPONS <span class="tab-count" id="weaponsCount">16</span>
+                </button>
+                <button class="shop-tab" data-category="effects" onclick="switchShopCategory('effects')">
+                    💫 TRAILS <span class="tab-count" id="effectsCount">12</span>
+                </button>
+            </div>
+            
+            <!-- Filter/Sort Bar -->
+            <div class="shop-filters">
+                <div class="filter-group">
+                    <input type="text" id="shopSearch" placeholder="🔍 Search items..." class="shop-search">
+                    <select id="shopSort" class="shop-sort" onchange="applySortFilter()">
+                        <option value="default">📋 Default Order</option>
+                        <option value="price-low">💰 Price: Low to High</option>
+                        <option value="price-high">💎 Price: High to Low</option>
+                        <option value="rarity">⭐ Rarity</option>
+                        <option value="name">🔤 Name (A-Z)</option>
+                    </select>
+                    <select id="shopRarityFilter" class="shop-filter" onchange="applyRarityFilter()">
+                        <option value="all">All Rarities</option>
+                        <option value="common">Common</option>
+                        <option value="rare">Rare</option>
+                        <option value="epic">Epic</option>
+                        <option value="legendary">Legendary</option>
+                    </select>
+                </div>
+                <div class="filter-stats">
+                    <span id="itemCount">0 items</span> | 
+                    <span id="ownedCount">0 owned</span>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="shop-content">
+                <!-- Left: Live Preview -->
+                <div class="shop-preview-section">
+                    <div class="preview-label">LIVE PREVIEW</div>
+                    <div class="preview-character" id="previewCharacter">
+                        <canvas id="previewCanvas" width="280" height="280"></canvas>
+                    </div>
+                    <div class="preview-stats">
+                        <div class="preview-stat-line"><strong>HAT:</strong> <span id="previewHat">None</span></div>
+                        <div class="preview-stat-line"><strong>WEAPON:</strong> <span id="previewWeapon">Standard Knife</span></div>
+                        <div class="preview-stat-line"><strong>TRAIL:</strong> <span id="previewEffect">None</span></div>
+                    </div>
+                </div>
+                
+                <!-- Right: Cosmetic Items Grid -->
+                <div class="shop-items-section">
+                    <div class="cosmetic-grid" id="cosmeticGrid">
+                        <!-- Cosmetic items will be dynamically generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ====================================================================
          GAME OVER SCREEN
          Displayed on player death with session statistics and restart option
          ==================================================================== -->
@@ -639,6 +1789,7 @@ UI ARCHITECTURE:
                 <div class="stats-line" id="killStats">Kills: 0</div>
             </div>
             <button id="restartBtn">RETRY</button>
+            <button id="changeGameModeBtn" style="margin-top: 15px;">CHANGE GAME MODE</button>
         </div>
     </div>
     
@@ -648,6 +1799,9 @@ UI ARCHITECTURE:
     
     <!-- THREE.js r150 - Core 3D rendering engine from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+    
+    <!-- Intro animation system -->
+    <script src="./intro-simple.js"></script>
     
     <!-- Main game logic and engine -->
     <script src="./game.js"></script>
