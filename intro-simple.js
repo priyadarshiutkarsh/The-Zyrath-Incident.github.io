@@ -1,10 +1,10 @@
-// Generated through AI
 /**
  * ============================================================================
  * THE ZYRATH INCIDENT - Simplified Text-Only Intro
  * ============================================================================
  */
 
+// Generated through AI
 class IntroAnimation {
     constructor(scene, camera, renderer) {
         this.scene = scene;
